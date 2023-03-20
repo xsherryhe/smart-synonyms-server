@@ -1,0 +1,28 @@
+* Data search:
+lemmas = WordNet::Lemma.find_all('word')
+  -> lemmas.map do |lemma| 
+    [lemma.word, lemma.pos, lemma.synsets.first(3).map(&:gloss)]
+  end (user selects from first 3 synsets, categorized by part of speech)
+  -> exclude any lemma with pos == 'r'
+  -> if the only lemma is pos == 'r', 
+    -run lemma.first.synsets.first.relation('\\').first
+    -make that the base synset called adj_synset
+    -return [[adj_synset.words.first, adj_synset.pos, adj_synset.gloss]]
+
+-> synonym methods:
+    - hypernyms/hyponyms for nouns and verbs (synset.hypernyms/hyponyms)
+    - synset.relation('&') for adjectives
+-> #map(&:words), to get words from synsets, #map(&:gloss) to get definition
+-> exclude words that have the target word in them
+-> select 5 synsets at random to display in force graph/flow
+
+* Front end force graph/flow:
+- Custom nodes with React Flow
+  - Clickable word/button that takes user to word
+  - Rotatable through other members of synset
+  - Gloss displayed in smaller letters
+
+* Other points:
+- Mobile first
+- TypeScript
+- Tailwind CSS styling
