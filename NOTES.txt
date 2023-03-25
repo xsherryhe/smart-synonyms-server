@@ -5,11 +5,13 @@ lemmas = WordNet::Lemma.find_all('word')
   end (user selects from first 3 synsets, categorized by part of speech)
   -> exclude any lemma with pos == 'r'
   -> if the only lemma is pos == 'r', 
-    -run lemma.first.synsets.first.relation('\\').first
+    -run lemmas.first.synsets.first.relation('\\').first
     -make that the base synset called adj_synset
     -return [[adj_synset.words.first, adj_synset.pos, adj_synset.gloss]]
 
--> synonym methods:
+* To get a synset: WordNet::Synset.new(synset.pos, synset.pos_offset)
+
+* synonym methods (extend WordNet::Synset class):
     - hypernyms/hyponyms for nouns and verbs (synset.hypernyms/hyponyms)
     - synset.relation('&') for adjectives
 -> #map(&:words), to get words from synsets, #map(&:gloss) to get definition
@@ -26,3 +28,7 @@ lemmas = WordNet::Lemma.find_all('word')
 - Mobile first
 - TypeScript
 - Tailwind CSS styling
+
+Routes:
+- /words/:word -> words#show (shows glosses)
+- /synsets/:pos/:pos_offset/synonyms -> synonyms#index (shows synonyms)
