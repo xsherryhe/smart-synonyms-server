@@ -12,6 +12,10 @@ class Word
     glosses.any? ? glosses : adj_glosses
   end
 
+  def as_json(_ = {})
+    glosses
+  end
+
   private
 
   def lemma_glosses(lemma)
@@ -26,6 +30,10 @@ class Word
 
   def adj_glosses
     adj_synset = @lemmas.first.synsets.first.relation('\\').first
-    [[adj_synset.words.first, adj_synset.pos, adj_synset.gloss]]
+    [{
+      word: adj_synset.words.first,
+      pos: adj_synset.pos,
+      synsets: [{ pos_offset: adj_synset.pos_offset, gloss: adj_synset.gloss }]
+    }]
   end
 end
