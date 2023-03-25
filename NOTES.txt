@@ -17,6 +17,7 @@ lemmas = WordNet::Lemma.find_all('word')
 -> #map(&:words), to get words from synsets, #map(&:gloss) to get definition
 -> exclude words that have the target word in them
 -> select 5 synsets at random to display in force graph/flow
+-> if fewer than 5 synsets, iterate through present synsets, adding the synsets of synsets, until there are at least 5
 
 * Front end force graph/flow:
 - Custom nodes with React Flow
@@ -31,4 +32,4 @@ lemmas = WordNet::Lemma.find_all('word')
 
 Routes:
 - /words/:word -> words#show (shows glosses)
-- /synsets/:pos/:pos_offset/synonyms -> synonyms#index (shows synonyms)
+- /synsets/:pos/:pos_offset?word=word -> synsets#show (shows synset words and synonyms)
