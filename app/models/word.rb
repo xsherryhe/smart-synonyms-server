@@ -6,10 +6,10 @@ class Word
   def glosses
     return [] if @lemmas.empty?
 
-    glosses = @lemmas.filter_map do |lemma|
+    filter_mapped_glosses = @lemmas.filter_map do |lemma|
       lemma.pos == 'r' ? nil : lemma_glosses(lemma)
     end
-    glosses.any? ? glosses : adj_glosses
+    filter_mapped_glosses.any? ? filter_mapped_glosses : adj_glosses
   end
 
   def as_json(_ = {})
