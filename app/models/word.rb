@@ -19,10 +19,12 @@ class Word
   private
 
   def lemma_glosses(lemma)
+    synsets = lemma.synsets.first(3)
     {
+      id: lemma.pos + synsets.first.pos_offset.to_s,
       word: lemma.word,
       pos: lemma.pos,
-      synsets: lemma.synsets.first(3).map do |synset|
+      synsets: synsets.map do |synset|
         { pos_offset: synset.pos_offset, gloss: synset.gloss }
       end
     }
