@@ -16,7 +16,7 @@ class Synset < WordNet::Synset
   def synonym_synsets(options = {})
     raw_synonym_synsets.filter_map do |synset|
       if (exclude = options[:exclude])
-        synset.words.reject! { |word| word.match?(/[_\-]#{exclude}|#{exclude}[_\-]|^#{exclude}$/) }
+        synset.words.reject! { |word| word.match?(/[ \-]#{exclude}|#{exclude}[ \-]|^#{exclude}$/) }
       end
       synset if synset.words.any?
     end
@@ -34,7 +34,7 @@ class Synset < WordNet::Synset
   private
 
   def words_from_word_counts
-    @word_counts.keys.map { |word| word.gsub(/\(.*\)/, '') }
+    @word_counts.keys.map { |word| word.gsub(/\(.*\)/, '').tr('_', ' ') }
   end
 
   def raw_synonym_synsets
