@@ -28,6 +28,7 @@ class Synset < WordNet::Synset
 
   def as_json(options = {})
     { words:,
+      definition:,
       synonyms: sample_synonyms(exclude: options[:exclude_from_synonyms]) }
   end
 
