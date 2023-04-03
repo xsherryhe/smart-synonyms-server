@@ -23,13 +23,23 @@ class Synset < WordNet::Synset
   end
 
   def definition
-    gloss[0...gloss.index('; "')]
+    gloss[0...gloss_split_index]
   end
 
-  def as_json(options = {})
-    { words:,
+  def examples
+    gloss[gloss_split_index + 2..].split('; ').map { |example| example.delete('"') }
+  end
+  end
+
+  def as_json(_options = {})
+    { pos_offset:,
+      words:,
       definition:,
-      synonyms: sample_synonyms(exclude: options[:exclude_from_synonyms]) }
+      examples: }
+  end
+
+  def as_json_with_synonyms(options = {})
+    as_json.merge({ synonyms: sample_synonyms(exclude: options[:exclude_from_synonyms]) })
   end
 
   private
@@ -38,6 +48,9 @@ class Synset < WordNet::Synset
     @word_counts.keys.map { |word| word.gsub(/\(.*\)/, '').tr('_', ' ') }
   end
 
+  def gloss_split_index
+    gloss.index('; "')
+  end
   def raw_synonym_synsets
     (hypernyms + hyponyms + (pos == 'a' ? relation('&') : [])).map do |wordnet_synset|
       Synset.new(wordnet_synset.pos, wordnet_synset.pos_offset)
