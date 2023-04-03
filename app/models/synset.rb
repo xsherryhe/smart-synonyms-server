@@ -29,6 +29,10 @@ class Synset < WordNet::Synset
   def examples
     gloss[gloss_split_index + 2..].split('; ').map { |example| example.delete('"') }
   end
+
+  def relation(pointer_symbol)
+    @pointers.select { |pointer| pointer.symbol == pointer_symbol }
+             .map! { |pointer| Synset.new(pointer.pos, pointer.offset) }
   end
 
   def as_json(_options = {})
@@ -51,10 +55,9 @@ class Synset < WordNet::Synset
   def gloss_split_index
     gloss.index('; "')
   end
+
   def raw_synonym_synsets
-    (hypernyms + hyponyms + (pos == 'a' ? relation('&') : [])).map do |wordnet_synset|
-      Synset.new(wordnet_synset.pos, wordnet_synset.pos_offset)
-    end
+    hypernyms + hyponyms + (pos == 'a' ? relation('&') : [])
   end
 
   def fill_to(count, options, synsets, all_synsets)
