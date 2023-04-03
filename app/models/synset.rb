@@ -27,6 +27,8 @@ class Synset < WordNet::Synset
   end
 
   def examples
+    return [] unless gloss_split_index
+
     gloss[gloss_split_index + 2..].split('; ').map { |example| example.delete('"') }
   end
 
