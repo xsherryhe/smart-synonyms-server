@@ -20,12 +20,19 @@ lemmas = WordNet::Lemma.find_all('word')
 -> if fewer than 5 synsets, iterate through present synsets, adding the synsets of synsets, until there are at least 5
 
 * Front end force graph/flow:
-- Custom nodes with React Flow
-  - Clickable word/button that takes user to word
-  - Rotatable through other members of synset
-  - Gloss displayed in smaller letters
+-App
+  - Search (by itself on home or /home, as header on glosses/synonyms routes)
+  - Glosses (/:word route)
+    - PartOfSpeech
+      - Gloss
+  - Synonyms (/:pos/:posOffset/synonyms route)
+    - Custom nodes with React Flow
+    - Clickable word/button that takes user to word
+    - Rotatable through other members of synset
+    - Gloss displayed in smaller letters
 
 * Other points:
+- Figma
 - Mobile first
 - TypeScript
 - Tailwind CSS styling
@@ -33,3 +40,11 @@ lemmas = WordNet::Lemma.find_all('word')
 Routes:
 - /words/:word -> words#show (shows glosses)
 - /synsets/:pos/:pos_offset?word=word -> synsets#show (shows synset words and synonyms)
+
+// TO DO:
+-Design Glosses page and Synonyms page on Figma
+  --Glosses alternating colors?
+-Truncate or validate max length of search input
+-Sanitize input
+
+// CHALLENGES:
