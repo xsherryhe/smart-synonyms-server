@@ -9,10 +9,7 @@ class Synset < WordNet::Synset
   end
 
   def sample_synonyms(options = {})
-    synsets = synonym_synsets(options)
-    fill_to(5, options, synsets, synsets).sample(5).map do |synset|
-      { definition: synset.definition, words: synset.words }
-    end
+    fill_to(5, options).map(&:as_json)
   end
 
   def synonym_synsets(options = {})
@@ -60,14 +57,25 @@ class Synset < WordNet::Synset
     hypernyms + hyponyms + (pos == 'a' ? relation('&') : [])
   end
 
-  def fill_to(count, options, synsets, all_synsets)
+  def fill_to(count, options, synsets = [self], all_synsets = [], visited = Set.new([@pos_offset]))
     return all_synsets if all_synsets.size >= count
 
-    new_synsets = synsets.reduce([]) do |arr, synset|
-      arr + synset.synonym_synsets(options)
-    end
-    return all_synsets if new_synsets.empty?
+    new_synsets = generate_new_synsets(options, synsets, visited)
+    return all_synsets.sample(count) if new_synsets.empty?
 
-    fill_to(count, options, new_synsets, all_synsets + new_synsets)
+    fill_to(count, options, new_synsets, all_synsets + new_synsets, visited)
+  end
+
+  def generate_new_synsets(options, synsets, visited)
+    new_synsets = []
+    synsets.each do |synset|
+      synset.synonym_synsets(options).each do |new_synset|
+        next if visited.include?(new_synset.pos_offset)
+
+        new_synsets << new_synset
+        visited.add(new_synset.pos_offset)
+      end
+    end
+    new_synsets
   end
 end
