@@ -4,6 +4,8 @@ class Synset < WordNet::Synset
   def initialize(pos, pos_offset)
     super
     @words = words_from_word_counts
+    @gloss = @gloss.gsub(/[`'][^`']+[`']/) { |str| "\"#{str[1...-1]}\"" }
+    @gloss_split_index = @gloss.index('; "')
   end
 
   def sample_synonyms(options = {})
@@ -23,13 +25,13 @@ class Synset < WordNet::Synset
   end
 
   def definition
-    gloss[0...gloss_split_index]
+    @gloss[0...@gloss_split_index]
   end
 
   def examples
-    return [] unless gloss_split_index
+    return [] unless @gloss_split_index
 
-    gloss[gloss_split_index + 2..].split('; ').map { |example| example.delete('"') }
+    @gloss[@gloss_split_index + 2..].split('; ').map { |example| example.delete('"') }
   end
 
   def relation(pointer_symbol)
@@ -52,10 +54,6 @@ class Synset < WordNet::Synset
 
   def words_from_word_counts
     @word_counts.keys.map { |word| word.gsub(/\(.*\)/, '').tr('_', ' ') }
-  end
-
-  def gloss_split_index
-    gloss.index('; "')
   end
 
   def raw_synonym_synsets
