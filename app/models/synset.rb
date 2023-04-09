@@ -58,7 +58,7 @@ class Synset < WordNet::Synset
   end
 
   def fill_to(count, options, synsets = [self], all_synsets = [], visited = Set.new([@pos_offset]))
-    return all_synsets if all_synsets.size >= count
+    return all_synsets.sample(count) if all_synsets.size >= count
 
     new_synsets = generate_new_synsets(options, synsets, visited)
     return all_synsets.sample(count) if new_synsets.empty?
