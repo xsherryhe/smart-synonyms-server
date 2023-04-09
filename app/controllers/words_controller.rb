@@ -1,5 +1,6 @@
 class WordsController < ApplicationController
   def show
-    render json: Word.new(params[:word])
+    word_data = Word.new(params[:word])
+    render json: (word_data.word ? word_data : false)
   end
 end

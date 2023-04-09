@@ -9,8 +9,12 @@ class Word
     @adverb_only ? adj_glosses : word_glosses
   end
 
+  def word
+    @adjusted_word
+  end
+
   def as_json(_options = {})
-    { word: @adjusted_word, glosses: }
+    { word:, glosses: }
   end
 
   private
@@ -21,6 +25,8 @@ class Word
       @lemmas = Lemma.find_all(@adjusted_word)
       break if @lemmas.any?
     end
+    return @adjusted_word = nil unless @lemmas.any?
+
     handle_adverb_only_case
   end
 
