@@ -1,8 +1,9 @@
 class Synset < WordNet::Synset
   attr_accessor :words
 
-  def initialize(pos, pos_offset)
-    super
+  def initialize(pos, pos_offset, origin_word = nil)
+    super(pos, pos_offset)
+    @origin_word = origin_word
     @words = words_from_word_counts
     @gloss = @gloss.gsub(/[`'][^`']+[`']/) { |str| "\"#{str[1...-1]}\"" }
     @gloss_split_index = @gloss.index('; "')
@@ -44,13 +45,15 @@ class Synset < WordNet::Synset
   end
 
   def as_json_with_synonyms(options = {})
-    as_json.merge({ synonyms: sample_synonyms(exclude: options[:exclude_from_synonyms]) })
+    as_json(options).merge({ synonyms: sample_synonyms(exclude: @origin_word) })
   end
 
   private
 
   def words_from_word_counts
-    @word_counts.keys.map { |word| word.gsub(/\(.*\)/, '').tr('_', ' ') }
+    @word_counts.keys
+                .map { |word| word.gsub(/\(.*\)/, '').tr('_', ' ') }
+                .sort_by { |word| word == @origin_word ? 0 : 1 }
   end
 
   def raw_synonym_synsets
