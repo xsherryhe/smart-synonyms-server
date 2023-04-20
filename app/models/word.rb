@@ -3,14 +3,14 @@ class Word
     initialize_lemmas_and_adjusted_word(word)
   end
 
+  def word
+    @adjusted_word
+  end
+
   def glosses
     return [] if @lemmas.empty?
 
     @adverb_only ? adj_glosses : word_glosses
-  end
-
-  def word
-    @adjusted_word
   end
 
   def as_json(_options = {})
