@@ -61,34 +61,35 @@ class WordTest < ActiveSupport::TestCase
     end
   end
 
+  describe 'Word#glosses' do
+    describe 'when the word is not an adverb' do
+      it 'returns an array' do
+        Lemma.stub :find_all, ->(_word) { Array.new(3) { MockLemma.new } } do
+          word_data = Word.new('apple')
+          glosses = word_data.glosses
+          assert_instance_of(Array, glosses)
+        end
+      end
+
+      it 'returns an array of hashes having a string id' do
+        Lemma.stub :find_all, ->(_word) { Array.new(3) { MockLemma.new } } do
+          word_data = Word.new('apple')
+          id = word_data.glosses.first[:id]
+          assert_instance_of(String, id)
+        end
+      end
+
+      it 'returns an array of hashes having a pos property' do
+        Lemma.stub :find_all, ->(_word) { Array.new(3) { MockLemma.new } } do
+          word_data = Word.new('apple')
+          pos = word_data.glosses.first[:pos]
+          assert_includes(%w[n v a], pos)
+        end
+      end
+    end
+  end
+
   ## Glosses -- returns array of hashes with id, pos, synsets array
     ## Test non-adverb
     ## Test adverb -- stub MockLemma#pos
-  # describe 'Word#glosses' do
-  #   setup do
-  #     Lemma.stub :find_all, Minitest::Mock.new do
-  #       Array.new(3) { MockLemma.new }
-  #     end
-  #   end
-
-  #   describe 'when the word is not an adverb' do
-  #     it 'returns an array' do
-  #       word_data = Word.new('apple')
-  #       glosses = word_data.glosses
-  #       assert_instance_of(Array, glosses)
-  #     end
-
-  #     it 'returns an array of hashes having a string id' do
-  #       word_data = Word.new('apple')
-  #       id = word_data.glosses.first.id
-  #       assert_instance_of(String, id)
-  #     end
-
-  #     it 'returns an array of hashes having a pos property' do
-  #       word_data = Word.new('apple')
-  #       id = word_data.glosses.first.id
-  #       assert_includes(%w[n v a], id)
-  #     end
-  #   end
-  # end
 end
