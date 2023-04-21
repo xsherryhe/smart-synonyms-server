@@ -13,19 +13,3 @@ class ActiveSupport::TestCase
 
   # Add more helper methods to be used by all tests here...
 end
-
-class MockSynset
-  def as_json
-    %w[a b c d e 1 2 3].sample
-  end
-end
-
-class MockLemma
-  def pos
-    %w[n v a].sample
-  end
-
-  def synsets
-    Array.new(3) { MockSynset.new }
-  end
-end

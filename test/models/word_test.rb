@@ -1,7 +1,27 @@
 require 'test_helper'
 
 class WordTest < ActiveSupport::TestCase
-  describe '#word' do
+  class MockSynset
+    def as_json
+      %w[a b c d e 1 2 3].sample
+    end
+
+    def pos_offset
+      rand(1000)
+    end
+  end
+
+  class MockLemma
+    def pos
+      %w[n v a].sample
+    end
+
+    def synsets
+      Array.new(3) { MockSynset.new }
+    end
+  end
+
+  describe 'Word#word' do
     it 'returns the input word when lemmas of the input word are found' do
       Lemma.stub :find_all, lambda { |word|
         word == 'aBc' ? Array.new(3) { MockLemma.new } : []
