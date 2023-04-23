@@ -9,6 +9,10 @@ class Synset < WordNet::Synset
     @gloss_split_index = @gloss.index('; "')
   end
 
+  def first_word
+    words.first
+  end
+
   def sample_synonyms(options = {})
     fill_to(5, options).map(&:as_json)
   end
@@ -35,6 +39,10 @@ class Synset < WordNet::Synset
   def relation(pointer_symbol)
     @pointers.select { |pointer| pointer.symbol == pointer_symbol }
              .map! { |pointer| Synset.new(pointer.pos, pointer.offset) }
+  end
+
+  def related_adj_synset
+    relation('\\').first
   end
 
   def as_json(_options = {})

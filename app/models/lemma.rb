@@ -10,4 +10,12 @@ class Lemma < WordNet::Lemma
   def synsets
     @synset_offsets.map { |offset| Synset.new(@pos, offset) }
   end
+
+  def related_adj_synset
+    synsets.first.related_adj_synset
+  end
+
+  def related_adj_word
+    related_adj_synset.first_word
+  end
 end

@@ -34,8 +34,9 @@ class Word
     @adverb_only = @lemmas.all? { |lemma| lemma.pos == 'r' }
     return unless @adverb_only
 
-    @adj_synset = @lemmas.first.synsets.first.relation('\\').first
-    @adjusted_word = @adj_synset.words.first
+    @adverb_lemma = @lemmas.first
+    @adj_synset = @adverb_lemma.related_adj_synset
+    @adjusted_word = @adverb_lemma.related_adj_word
   end
 
   def word_glosses
