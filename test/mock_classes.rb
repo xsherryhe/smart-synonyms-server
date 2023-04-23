@@ -1,10 +1,20 @@
 class MockSynset
+  attr_reader :pos
+
   def as_json
     %w[a b c d e 1 2 3].sample
   end
 
   def pos_offset
     rand(1000)
+  end
+
+  def related_adj_synset
+    MockSynset.new
+  end
+
+  def first_word
+    'barfoo'
   end
 end
 
