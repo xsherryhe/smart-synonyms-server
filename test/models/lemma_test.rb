@@ -26,8 +26,8 @@ class LemmaTest < ActiveSupport::TestCase
     it 'returns an array of synsets' do
       Synset.stub :new, MockSynset.new do
         lemma = Lemma.find('apple', 'noun')
-        synset = lemma.synsets.first
-        assert_instance_of(MockSynset, synset)
+        synsets = lemma.synsets
+        synsets.each { |synset| assert_instance_of(MockSynset, synset) }
       end
     end
   end
