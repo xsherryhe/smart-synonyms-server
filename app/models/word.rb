@@ -1,5 +1,9 @@
 class Word
+  attr_reader :errors
+
   def initialize(word)
+    return unless validate(word)
+
     initialize_lemmas_and_adjusted_word(word)
   end
 
@@ -18,6 +22,15 @@ class Word
   end
 
   private
+
+  def validate(word)
+    if word.empty? || word.length > 30
+      @errors = ["Word is #{word.empty? ? 'required' : 'too long'}"]
+      return false
+    end
+
+    true
+  end
 
   def initialize_lemmas_and_adjusted_word(word)
     [word, word.downcase, word.downcase.capitalize].each do |possible_word|
