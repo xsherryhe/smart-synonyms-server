@@ -8,7 +8,7 @@ class Word
   end
 
   def word
-    @adjusted_word.gsub(/\(.*\)/, '').tr('_', ' ')
+    @adjusted_word&.gsub(/\(.*\)/, '')&.tr('_', ' ')
   end
 
   def glosses

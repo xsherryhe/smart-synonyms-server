@@ -40,6 +40,14 @@ class WordTest < ActiveSupport::TestCase
         assert_nil(word)
       end
     end
+
+    it 'returns the formatted version of an input word' do
+      Lemma.stub :find_all, Array.new(3) { MockLemma.new } do
+        word_data = Word.new('apple_tree')
+        word = word_data.word
+        assert_equal('apple tree', word)
+      end
+    end
   end
 
   describe 'Word#glosses' do
